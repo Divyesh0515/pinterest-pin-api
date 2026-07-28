@@ -23,12 +23,10 @@ def create_pin():
     if not image_url:
         return jsonify({"error": "image_url is required"}), 400
     
-    # Download image from Fal.ai
     img_response = requests.get(image_url, timeout=30)
     img = Image.open(BytesIO(img_response.content)).convert("RGBA")
     img = img.resize((1000, 1500), Image.LANCZOS)
     
-    # Dark overlay at bottom
     overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     draw_overlay = ImageDraw.Draw(overlay)
     for i in range(600):
@@ -38,7 +36,6 @@ def create_pin():
     img = Image.alpha_composite(img, overlay)
     draw = ImageDraw.Draw(img)
     
-    # Fonts
     try:
         font_title = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 90)
         font_sub = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 42)
@@ -48,10 +45,8 @@ def create_pin():
         font_sub = ImageFont.load_default()
         font_small = ImageFont.load_default()
     
-    # Website top
     draw.text((500, 70), website, font=font_small, fill=(200, 210, 255, 220), anchor="mm")
     
-    # Pin text
     words = pin_text.split()
     if len(words) <= 3:
         lines = [pin_text]
@@ -71,13 +66,11 @@ def create_pin():
     draw.rounded_rectangle([(100, 1380), (900, 1470)], radius=50, fill=(220, 38, 38, 245))
     draw.text((500, 1425), "READ FULL STORY →", font=font_small, fill=(255, 255, 255, 255), anchor="mm")
     
-    # Save to file
     filename = f"{uuid.uuid4()}.jpg"
     filepath = os.path.join(UPLOAD_DIR, filename)
     img = img.convert("RGB")
     img.save(filepath, format="JPEG", quality=95)
     
-    # Return public URL
     base_url = request.host_url.rstrip('/')
     image_public_url = f"{base_url}/pin-image/{filename}"
     
@@ -85,7 +78,6 @@ def create_pin():
 
 @app.route('/pin-image/<filename>', methods=['GET'])
 def serve_image(filename):
-    from flask import send_file
     filepath = os.path.join(UPLOAD_DIR, filename)
     return send_file(filepath, mimetype='image/jpeg')
 
@@ -93,14 +85,9 @@ def serve_image(filename):
 def health():
     return jsonify({"status": "Pinterest Pin API running!"})
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
 @app.route('/dashboard')
 def dashboard():
     return send_file(os.path.join(os.path.dirname(__file__), 'dashboard.html'))
-from flask import Flask, request, jsonify, send_file
-from flask_cors import CORS
 
-app = Flask(__name__)
-CORS(app)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
