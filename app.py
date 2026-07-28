@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, send_file
-from flask import Flask, request, jsonify
+from flask_cors import CORS
 from PIL import Image, ImageDraw, ImageFont
 import requests
 from io import BytesIO
@@ -8,6 +8,7 @@ import os
 import uuid
 
 app = Flask(__name__)
+CORS(app)
 
 UPLOAD_DIR = "/tmp/pins"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -98,3 +99,8 @@ if __name__ == '__main__':
 @app.route('/dashboard')
 def dashboard():
     return send_file(os.path.join(os.path.dirname(__file__), 'dashboard.html'))
+from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
