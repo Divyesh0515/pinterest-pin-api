@@ -96,4 +96,4 @@ if __name__ == '__main__':
 
 @app.route('/dashboard')
 def dashboard():
-    return send_file('dashboard.html')
+    return send_file(os.path.join(os.path.dirname(__file__), 'dashboard.html'))
