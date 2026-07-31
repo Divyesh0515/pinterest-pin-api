@@ -13,15 +13,14 @@ CORS(app)
 UPLOAD_DIR = "/tmp/pins"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# Font paths — root folder mein hain
 BASE_DIR = os.path.dirname(__file__)
 FONT_EXTRABOLD = os.path.join(BASE_DIR, 'Poppins-ExtraBold.ttf')
 FONT_BOLD      = os.path.join(BASE_DIR, 'Poppins-Bold.ttf')
 
-def draw_text_with_stroke(draw, pos, text, font, fill=(255,255,255,255), stroke=2, stroke_fill=(0,0,0,255), anchor="mm"):
+def draw_text_with_stroke(draw, pos, text, font, fill=(255,255,255,255), stroke=6, stroke_fill=(0,0,0,255), anchor="mm"):
     x, y = pos
-    for dx in [-stroke, 0, stroke]:
-        for dy in [-stroke, 0, stroke]:
+    for dx in range(-stroke, stroke+1):
+        for dy in range(-stroke, stroke+1):
             if dx != 0 or dy != 0:
                 draw.text((x+dx, y+dy), text, font=font, fill=stroke_fill, anchor=anchor)
     draw.text((x, y), text, font=font, fill=fill, anchor=anchor)
@@ -80,25 +79,25 @@ def create_pin():
 
     # Website top bar
     draw_text_with_stroke(draw, (500, 60), website, font_website,
-                          fill=(255, 255, 255, 255), stroke=2)
+                          fill=(255, 255, 255, 255), stroke=3)
 
     # Pin title
     lines = textwrap.wrap(pin_text, width=wrap_width)
-    line_height = title_size + 20
+    line_height = title_size + 50  # ← +50 for more line spacing
     total_height = len(lines) * line_height
     y_start = 970 - (total_height // 2)
 
     for line in lines:
         draw_text_with_stroke(draw, (500, y_start), line, font_title,
-                              fill=(255, 255, 255, 255), stroke=2,
+                              fill=(255, 255, 255, 255), stroke=6,
                               stroke_fill=(0, 0, 0, 255))
         y_start += line_height
 
     # Subtitle
     draw_text_with_stroke(draw, (500, y_start + 30),
                           "Click to read the full story", font_sub,
-                          fill=(255, 220, 100, 240), stroke=1,
-                          stroke_fill=(0, 0, 0, 200))
+                          fill=(255, 220, 100, 240), stroke=3,
+                          stroke_fill=(0, 0, 0, 220))
 
     # Red button
     draw.rounded_rectangle([(80, 1385), (920, 1478)], radius=50, fill=(220, 38, 38, 255))
