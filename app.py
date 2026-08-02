@@ -95,13 +95,13 @@ def create_pin():
 
     # Subtitle
     draw_text_with_stroke(draw, (500, y_start + 30),
-                          "Click to read the full story", font_sub,
+                          "Most People Never Read the Ending...", font_sub,
                           fill=(255, 220, 100, 240), stroke=3,
                           stroke_fill=(0, 0, 0, 220))
 
     # Red button
     draw.rounded_rectangle([(80, 1385), (920, 1478)], radius=50, fill=(220, 38, 38, 255))
-    draw.text((500, 1430), "READ FULL STORY", font=font_btn,
+    draw.text((500, 1430), "Visit Our Profile to Read More", font=font_btn,
               fill=(255, 255, 255, 255), anchor="mm")
 
     # Save
